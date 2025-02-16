@@ -10,7 +10,6 @@ import re
 # --------- CONFIG ---------
 DB_FILE = "secure_patient_data.db"
 
-# CSV file paths (uncomment the ones you want to use)
 csv_files = {
     'demographics': 'STARR/demographics.csv',
     'clinical_note': 'STARR/clinical_note.csv',
