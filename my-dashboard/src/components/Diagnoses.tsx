@@ -1,13 +1,21 @@
 "use client"
 
 import React from "react"
-import { Card, CardContent, Typography, Divider, IconButton, Menu, MenuItem } from "@mui/material"
+import { 
+  Card, 
+  CardContent, 
+  Typography, 
+  Divider, 
+  IconButton, 
+  Menu, 
+  MenuItem,
+  Box // <-- ADDED
+} from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu"
 import patientData from "../data/data.json"
 import { useLocation, useNavigate } from "react-router-dom"
 
 //  onLogout function
-
 
 export function Diagnoses() {
     const location = useLocation()
@@ -28,7 +36,9 @@ export function Diagnoses() {
   // Extract clinical notes from patient data
   const patient = patientData[patientId]
   const patientKeys = Object.keys(patient)
-  const diagnoses = (patient["diagnoses"] || []).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5)
+  const diagnoses = (patient["diagnoses"] || [])
+    .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5)
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
@@ -42,39 +52,39 @@ export function Diagnoses() {
     <>
     {/* Dropdown Menu Button in the Top Left */}
     <IconButton 
-        onClick={handleMenuOpen} 
-        sx={{ position: "absolute", top: 10, left: 10 }}
-      >
-        <MenuIcon fontSize="large" />
-      </IconButton>
+      onClick={handleMenuOpen} 
+      sx={{ position: "absolute", top: 10, left: 10 }}
+    >
+      <MenuIcon fontSize="large" />
+    </IconButton>
 
-      {/* Dropdown Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={() => {
-          navigate("/patient-data", { state: { patientId: patientId } })
-          handleMenuClose()
-        }
-        }>Home</MenuItem>
-{patientKeys.filter(key => !["demographics", "procedures", "pathology_report", "radiology_report", "med_admin", "med_orders"].includes(key)).map((key, index) => {
+    {/* Dropdown Menu */}
+    <Menu
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={() => {
+        navigate("/patient-data", { state: { patientId: patientId } })
+        handleMenuClose()
+      }}>
+        Home
+      </MenuItem>
+
+      {patientKeys.filter(key => !["demographics", "procedures", "pathology_report", "radiology_report", "med_admin", "med_orders"].includes(key))
+        .map((key, index) => {
           let displayKey = key
           let path = `/${key}`
-
           if (key === "clinical_note") {
             displayKey = "Patient Notes"
             path = "/patient-notes"
           } else if (key === "diagnoses") {
             displayKey = "Diagnoses"
             path = "/diagnoses"
-          }
-          else if (key === "immunization") {
+          } else if (key === "immunization") {
             displayKey = "Immunizations"
             path = "/immunizations"
-          }
-          else if (key === "labs") {
+          } else if (key === "labs") {
             displayKey = "Labs"
             path = "/labs"
           } else if (key === "orders_and_ordersets") {
@@ -86,24 +96,25 @@ export function Diagnoses() {
             <MenuItem 
               key={index} 
               onClick={() => { 
-          navigate(path, { state: { patientId: patientId } }) 
-          handleMenuClose()
+                navigate(path, { state: { patientId: patientId } }) 
+                handleMenuClose()
               }}
             >
               {displayKey}
             </MenuItem>
           )
-        })} 
-        <MenuItem 
-          onClick={() => {
-            onLogout()
-            handleMenuClose()
-          }} 
-          sx={{ color: "red", fontWeight: "bold" }}
-        >
-          Logout
-        </MenuItem>
-      </Menu>
+        })
+      } 
+      <MenuItem 
+        onClick={() => {
+          onLogout()
+          handleMenuClose()
+        }} 
+        sx={{ color: "red", fontWeight: "bold" }}
+      >
+        Logout
+      </MenuItem>
+    </Menu>
 
     <Card sx={{ maxWidth: 800, margin: "80px auto", padding: 3, borderRadius: 4, boxShadow: 3 }}>
       <CardContent>
@@ -113,10 +124,24 @@ export function Diagnoses() {
 
         <Divider sx={{ mb: 2 }} />
 
-        {diagnoses.length > 0 ? (
-          diagnoses.map((note: any, index: number) => (
-            <Card key={index} sx={{ mb: 2, padding: 2, borderRadius: 2, boxShadow: 1 }}>
-              <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
+        <Box sx={{ maxHeight: "400px", overflowY: "auto", pr: 1 }}>
+          {diagnoses.length > 0 ? (
+            diagnoses.map((note: any, index: number) => (
+              <Card
+                key={index}
+                sx={{
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
                 <Typography fontWeight="bold">Date:</Typography> {new Date(note.date).toISOString().split("T")[0]}
                 <Typography fontWeight="bold">Age:</Typography> {note.age} years
                 <Typography fontWeight="bold">Type:</Typography> {note.type}
@@ -125,13 +150,14 @@ export function Diagnoses() {
                 <Typography fontWeight="bold">ICD-10 Code:</Typography> {note.icd10_code || "N/A"}
                 <Typography fontWeight="bold">Description:</Typography> {note.description}
                 <Typography fontWeight="bold">Performing Provider:</Typography> {note.performing_provider || "Unknown"}
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            No diagonis notes available.
-          </Typography>
-        )}
+              </Card>
+            ))
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              No diagonis notes available.
+            </Typography>
+          )}
+        </Box>
       </CardContent>
     </Card>
     </>

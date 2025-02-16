@@ -16,7 +16,7 @@ export function Login() {
   const trainRAG = async (patientID) => {
     try {
       const res = await fetch(
-        `https://6c63-2607-f6d0-ced-5bb-4c9d-c83c-8fd1-3cf9.ngrok-free.app/get_patient?patient_id=${patientID}`,
+        `http://127.0.0.1:5000/get_patient?patient_id=${patientID}`,
         {
           method: "GET",
           headers: {
@@ -78,10 +78,10 @@ export function Login() {
         }}
       >
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Patient Login
+          Search Patients
         </Typography>
         <Typography variant="body2" sx={{ mb: 3 }}>
-          Enter your Patient ID to continue
+          Enter a Patient ID to continue
         </Typography>
         <form onSubmit={handleLogin}>
           <TextField
@@ -129,7 +129,7 @@ export function Login() {
               },
             }}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Search"}
           </Button>
           {error && (
             <Typography color="error" sx={{ mt: 2, fontWeight: "bold" }}>

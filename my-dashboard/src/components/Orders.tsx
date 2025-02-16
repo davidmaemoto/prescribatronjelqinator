@@ -1,13 +1,21 @@
 "use client"
 
 import React from "react"
-import { Card, CardContent, Typography, Divider, IconButton, Menu, MenuItem } from "@mui/material"
+import { 
+  Card, 
+  CardContent, 
+  Typography, 
+  Divider, 
+  IconButton, 
+  Menu, 
+  MenuItem,
+  Box // <-- ADDED
+} from "@mui/material"
 import MenuIcon from "@mui/icons-material/Menu"
 import patientData from "../data/data.json"
 import { useLocation, useNavigate } from "react-router-dom"
 
 //  onLogout function
-
 
 export function Orders() {
     const location = useLocation()
@@ -88,8 +96,8 @@ export function Orders() {
             <MenuItem 
               key={index} 
               onClick={() => { 
-          navigate(path, { state: { patientId: patientId } }) 
-          handleMenuClose()
+                navigate(path, { state: { patientId: patientId } }) 
+                handleMenuClose()
               }}
             >
               {displayKey}
@@ -107,6 +115,7 @@ export function Orders() {
         </MenuItem>
       </Menu>
 
+    {/* Medical Admin Notes */}
     <Card sx={{ maxWidth: 800, margin: "80px auto", padding: 3, borderRadius: 4, boxShadow: 3 }}>
       <CardContent>
         <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -115,10 +124,24 @@ export function Orders() {
 
         <Divider sx={{ mb: 2 }} />
 
-        {medAdmin.length > 0 ? (
-          medAdmin.map((note: any, index: number) => (
-            <Card key={index} sx={{ mb: 2, padding: 2, borderRadius: 2, boxShadow: 1 }}>
-              <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
+        <Box sx={{ maxHeight: "400px", overflowY: "auto", pr: 1 }}>
+          {medAdmin.length > 0 ? (
+            medAdmin.map((note: any, index: number) => (
+              <Card
+                key={index}
+                sx={{
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
                 <Typography fontWeight="bold">Medication:</Typography> {note.medication || "N/A"}
                 <Typography fontWeight="bold">Line:</Typography> {note.line || "N/A"}
                 <Typography fontWeight="bold">Taken Date:</Typography> {note.taken_date ? new Date(note.taken_date).toISOString().split("T")[0] : "N/A"}
@@ -131,15 +154,18 @@ export function Orders() {
                 <Typography fontWeight="bold">Infusion Rate:</Typography> {note.infusion_rate ? `${note.infusion_rate} ${note.infusion_rate_unit || ""}` : "N/A"}
                 <Typography fontWeight="bold">Dose Unit:</Typography> {note.dose_unit || "N/A"}
                 <Typography fontWeight="bold">MAR Duration:</Typography> {note.mar_duration ? `${note.mar_duration} ${note.mar_duration_unit || ""}` : "N/A"}
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            No medical admin notes available.
-          </Typography>
-        )}
+              </Card>
+            ))
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              No medical admin notes available.
+            </Typography>
+          )}
+        </Box>
       </CardContent>
     </Card>
+
+    {/* Medical Order Reports */}
     <Card sx={{ maxWidth: 800, margin: "80px auto", padding: 3, borderRadius: 4, boxShadow: 3 }}>
       <CardContent>
         <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -148,9 +174,23 @@ export function Orders() {
 
         <Divider sx={{ mb: 2 }} />
 
-        {medOrders.length > 0 ? (
-          medOrders.map((note: any, index: number) => (
-            <Card key={index} sx={{ mb: 2, padding: 2, borderRadius: 2, boxShadow: 1 }}>
+        <Box sx={{ maxHeight: "400px", overflowY: "auto", pr: 1 }}>
+          {medOrders.length > 0 ? (
+            medOrders.map((note: any, index: number) => (
+              <Card
+                key={index}
+                sx={{
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                    boxShadow: 4,
+                  },
+                }}
+              >
                 <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
                 <Typography fontWeight="bold">Medication:</Typography> {note.medication || "N/A"}
                 <Typography fontWeight="bold">SIG:</Typography> {note.sig || "N/A"}
@@ -180,16 +220,18 @@ export function Orders() {
 
                 <Typography fontWeight="bold">Ingredients:</Typography> {note.ingredients || "N/A"}
                 <Typography fontWeight="bold">Prescribing Provider:</Typography> {note.prescribing_provider || "N/A"}
-
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            No medical order reports available.
-          </Typography>
-        )}
+              </Card>
+            ))
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              No medical order reports available.
+            </Typography>
+          )}
+        </Box>
       </CardContent>
     </Card>
+
+    {/* Orders and Ordersets */}
     <Card sx={{ maxWidth: 800, margin: "80px auto", padding: 3, borderRadius: 4, boxShadow: 3 }}>
       <CardContent>
         <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -198,9 +240,23 @@ export function Orders() {
 
         <Divider sx={{ mb: 2 }} />
 
-        {ordersOrdersets.length > 0 ? (
-          ordersOrdersets.map((note: any, index: number) => (
-            <Card key={index} sx={{ mb: 2, padding: 2, borderRadius: 2, boxShadow: 1 }}>
+        <Box sx={{ maxHeight: "400px", overflowY: "auto", pr: 1 }}>
+          {ordersOrdersets.length > 0 ? (
+            ordersOrdersets.map((note: any, index: number) => (
+              <Card
+                key={index}
+                sx={{
+                  mb: 2,
+                  p: 2,
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  transition: "transform 0.3s, box-shadow 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.02)",
+                    boxShadow: 4,
+                  },
+                }}
+              >
                 <Typography fontWeight="bold">Patient ID:</Typography> {note.patient_id}
                 <Typography fontWeight="bold">Order ID:</Typography> {note.order_id || "N/A"}
 
@@ -230,14 +286,14 @@ export function Orders() {
 
                 <Typography fontWeight="bold">Order Status Code:</Typography> {note.order_status_code || "N/A"}
                 <Typography fontWeight="bold">Order Status:</Typography> {note.order_status || "N/A"}
-
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            No orders and ordersets available.
-          </Typography>
-        )}
+              </Card>
+            ))
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              No orders and ordersets available.
+            </Typography>
+          )}
+        </Box>
       </CardContent>
     </Card>
     </>
